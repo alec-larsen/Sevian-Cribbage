@@ -1,6 +1,9 @@
 from __future__ import annotations
 import numpy as np
 
+RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+SUITS = ["\u2605", "\u2660", "\u2663", "\u2665", "\u2666"]
+
 class Card:
     rank: int #Exact rank of card i.e. J, Q, K
     value: int #Number of points card is worth when counting, i.e. J, Q, K = 10
@@ -12,8 +15,8 @@ class Card:
         self.suit = suit
         
     def __repr__(self):
-        #When print call is made, print card as a tuple of its suit and rank.
-        return(f"({self.suit}, {self.rank})")
+        #When print call is made, print card as a tuple of its suit and rank. Built only for decks up to 5 suits and 13 ranks.
+        return(f"{RANKS[self.rank]}{SUITS[self.suit]}")
         
     def __add__(self, other: Card | int) -> int:
         """
