@@ -2,4 +2,5 @@
 # Additional libraries will be added as required during development
 
 numpy
+pytest
 random
