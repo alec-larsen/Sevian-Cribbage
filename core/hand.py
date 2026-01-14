@@ -10,6 +10,15 @@ class Hand:
         self.cards = cards
         
     def __iadd__(self, card: Card) -> Hand:
+        """
+        Succinct command to add card to existing hand.
+
+        Args:
+            card (Card): Card to be added to hand.
+
+        Returns:
+            Hand: Hand after adding new card.
+        """
         self.cards.append(card)
         return(self)
     
