@@ -48,3 +48,35 @@ def test_pairs(p_hand: Hand, points: int):
 
 def test_fifteen_points(f_hand: Hand, points: int):
     assert f_hand.fifteen_points() == points
+    
+#Testing fifteen counting
+@pytest.mark.parametrize("flush_hand, points", [
+    (Hand(Deck(1, 13).cards[0:5]), 0), #This deck has only one rank; each card has a different suit. Flushes should be impossible; scores 0 from flushes.
+    (Hand([Card(0,4), Card(5,3), Card(10,3), Card(8,1), Card(10,1)]), 0), #Maximum number of same suit cards is 2; scores 0 from flushes.
+    (Hand([Card(5,3), Card(4,3), Card(12,3), Card(2,1), Card(10,3)]), 4), #Hand with four same-suited cards. Scores 4 from flushes.
+    (Hand([Card(8,3), Card(3,3), Card(9,3), Card(1,3), Card(5,3)]), 5), #Hand with all cards the same suit. Scores 5 from flushes.
+])
+  
+#Testing flush_points
+def test_flush_points(flush_hand: Hand, points: int):
+    assert flush_hand.flush_points() == points
+    
+#Testing eyes_points
+@pytest.mark.parametrize("eyes_hand, cut, points", [
+    (Hand(Deck(11, 1).cards[0:4]), Card(11,0), 0), #This deck has only one suit, with ranks A-J. Cut card is Q with same suit. Since there is no king/eye anywhere in cardset, eyes is impossible; scores 0.
+    (Hand([Card(0,4), Card(5,3), Card(10,3), Card(8,1)]), Card(12,1), 0), #Cut card is king/eye, and has card matching suit in hand. This should NOT score an eye point.
+    (Hand([Card(5,3), Card(4,3), Card(12,3), Card(2,1)]), Card(10,3), 1), #Hand containing king/eye matching suit of cut card. Scores 1 from eyes.
+])
+
+def test_eyes_points(eyes_hand: Hand, cut: Card, points: int):
+    assert eyes_hand.eyes_points(cut) == points
+
+#Testing ring_points
+@pytest.mark.parametrize("ring_hand, points", [
+    (Hand(Deck(1, 5).cards), 5), #This deck has only one rank; each card has a different suit, so guaranteed to form ring.
+    (Hand([Card(0,4), Card(5,2), Card(10,3), Card(8,0), Card(10,1)]), 5), #This hand has multiple Jacks, but all different suits. It forms a ring.
+    (Hand([Card(5,3), Card(4,1), Card(12,3), Card(2,1), Card(10,2)]), 0), #Hand with two pairs of same-suited cards. Does NOT form a ring.
+])
+
+def test_ring_points(ring_hand: Hand, points: int):
+    assert ring_hand.ring_points() == points
