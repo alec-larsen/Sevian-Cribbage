@@ -1,6 +1,7 @@
 from __future__ import annotations
 from .card import Card
 from .stack import Stack
+from . import util
 import numpy as np
 
 class Hand:
@@ -79,6 +80,34 @@ class Hand:
                 if(self.cards[i] - self.cards[j] == 0):
                     points += 2
             
+        return points
+    
+    def run_points(self) -> int:
+        """
+        Calculate number of points scored from runs in hand. A run is three or more cards of consecutive ranks.
+
+        Returns:
+            int: Number of points scored from runs in hand.
+        """
+        points = 0
+        
+        #Produce list of ranks of all cards, sorted in ascending order.
+        ranks = [card.rank for card in self.cards]
+        
+        run: list[int] = []
+
+        for i in range(0, 13):
+            #If i is the rank of some card in hand, add it to the current run.
+            if i in ranks:
+                run.append(i)
+                
+            else:
+                #If our built run has three or more ranks in it, it scores points.
+                if len(run) >= 3:
+                    points += util.specific_run_points(ranks, run)
+                #Reset run.
+                run = []
+                
         return points
     
     def flush_points(self) -> int:
