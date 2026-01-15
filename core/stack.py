@@ -23,7 +23,7 @@ class Stack():
         """
         Calculate flush points in stack.
         
-        A cribbage flush is worth one point per card for a minimum of four cards.
+        A cribbage flush is worth one point per card for a minimum of four cards. For stacks, all flush cards must be at the top of the stack.
         
         Returns:
             int: Maximum number n such that the top n cards in the stack are the same suit if n >= 4. Else 0.
