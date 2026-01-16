@@ -72,8 +72,8 @@ def test_eyes_points(eyes_hand: Hand, cut: Card, points: int):
 
 #Testing ring_points
 @pytest.mark.parametrize("ring_hand, points", [
-    (Hand(Deck(1, 5).cards), 5), #This deck has only one rank; each card has a different suit, so guaranteed to form ring.
-    (Hand([Card(0,4), Card(5,2), Card(10,3), Card(8,0), Card(10,1)]), 5), #This hand has multiple Jacks, but all different suits. It forms a ring.
+    (Hand(Deck(1, 5).cards), 3), #This deck has only one rank; each card has a different suit, so guaranteed to form ring.
+    (Hand([Card(0,4), Card(5,2), Card(10,3), Card(8,0), Card(10,1)]), 3), #This hand has multiple Jacks, but all different suits. It forms a ring.
     (Hand([Card(5,3), Card(4,1), Card(12,3), Card(2,1), Card(10,2)]), 0), #Hand with two pairs of same-suited cards. Does NOT form a ring.
 ])
 

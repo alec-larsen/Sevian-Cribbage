@@ -144,14 +144,14 @@ class Hand:
             - 'hand contains only cards with suits 0-4 (Sevian suits)
 
         Returns:
-            int: 5 if a ring is formed, 0 otherwise.
+            int: 3 if a ring is formed, 0 otherwise.
         """
         for suit in range(5):
             #If our hand contains multiple of any suit, it cannot form a ring
             if self % suit != 1:
                 return 0
         
-        return 5
+        return 3
     
     def eyes_points(self, cut: Card) -> int:
         """
