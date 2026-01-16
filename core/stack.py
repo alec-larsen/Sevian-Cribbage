@@ -1,4 +1,5 @@
 from .card import Card
+from core import util
 
 class Stack():
     cards: list[Card]
@@ -60,6 +61,23 @@ class Stack():
             else:
                 return points
         #If we make it to this point, all cards on the stack are the same rank.
+        return points
+    
+    def runs(self) -> int:
+        """
+        Calculate run points at top of stack.
+
+        Returns:
+            int: Number of points scored from runs at the top of the stack.
+        """
+        points = 0
+        cards: list[Card] = []
+        #Loop through all possible run lengths to check for longest run on top of stack
+        for card in self.cards:
+            cards.append(card)
+            #If top i-1 cards of stack form run, update maximum sized run
+            if len(cards) >= 3 and util.is_run(cards):
+                points = len(cards)
         return points
         
     def add_card(self, card: Card) -> bool:

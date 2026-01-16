@@ -36,6 +36,17 @@ def test_stack_flush(flush_stack: Stack, points: int):
 def test_stack_pair(pair_stack: Stack, points: int):
     assert pair_stack.pairs() == points
 
+#Test run counting in stack
+@pytest.mark.parametrize("run_stack, points", [
+    (Stack([Card(6,1), Card(4,3), Card(5,2), Card(1,2)]), 3), #Run of 3 at top of stack; expect 3 run points.
+    (Stack([Card(4,0), Card(5,4), Card(5,1), Card(3,2)]), 0), #If this stack were a hand, it would score 6 run points. This, however should score 0, as 5,6,6,4 is NOT a single run, but two runs of three.
+    (Stack([Card(10,2), Card(11,3), Card(9,2), Card(12,2)]), 4), #Run over entire stack; expect 4 run points.
+    (Stack([Card(0,2), Card(7,2), Card(8,3), Card(9,1)]), 0), #Run of three, but NOT at top of stack; expect 0.
+])
+
+def test_stack_runs(run_stack: Stack, points: int):
+    assert run_stack.runs() == points
+
 #Test add_card
 params = [
     (Stack([Card(4,1), Card(1,4), Card(3,1), Card(3,4)]), Card(3,2), True, Card(3,2)), #Initial stack sums to 15; attempting to add a 4 should return True.
