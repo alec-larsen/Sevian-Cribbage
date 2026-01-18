@@ -14,7 +14,7 @@ class Card:
         self.value = np.min([self.rank + 1, 10]) #10, J, Q, K cards are all worth 10 points in counting.
         self.suit = suit
         
-    def __repr__(self):
+    def __str__(self):
         #When print call is made, print card as a tuple of its suit and rank. Built only for decks up to 5 suits and 13 ranks.
         return(f"{RANKS[self.rank]}{SUITS[self.suit]}")
         
