@@ -1,18 +1,19 @@
 from __future__ import annotations
+import numpy as np
+
 from .card import Card
 from .stack import Stack
 from . import util
-import numpy as np
 
 class Hand:
     cards: list[Card]
-    
+
     def __init__(self, cards: list[Card]):
         self.cards = cards
-        
+
     def __len__(self) -> int:
         return len(self.cards)
-        
+
     def __iadd__(self, card: Card) -> Hand:
         """
         Succinct command to add card to existing hand.
@@ -24,8 +25,8 @@ class Hand:
             Hand: Hand after adding new card.
         """
         self.cards.append(card)
-        return(self)
-    
+        return self
+
     def __mod__(self, suit: int) -> int:
         """
         Check number of cards in hand with a given suit.
@@ -37,37 +38,37 @@ class Hand:
             int: Number of cards in hand with suit.
         """
         count = 0
-        
+
         for card in self.cards:
-            if (card.suit == suit):
+            if card.suit == suit:
                 count += 1
-                
+
         return count
-    
-    def fifteen_points(self, indices: list[int] = [], points: int = 0) -> int:
-        
+
+    def fifteen_points(self, indices: list[int] = [], points: int = 0) -> int: #pylint: disable=dangerous-default-value
+
         if not indices:
             low = 0
-            
+
         else:
             low = np.max(indices) + 1
-        
+
         for i in range(low, len(self)):
             print(f"i = {i}")
             card_set = Stack([self.cards[j] for j in indices] + [self.cards[i]])
-            
+
             #If current cards add to exactly fifteen, they score 2 fifteen points.
-            if(+card_set == 15):
+            if +card_set == 15:
                 points += 2
-            
+
             #If current set of cards adds to less than 15, adding another card may form a fifteen.
-            elif(+card_set < 15):
+            elif +card_set < 15:
                 indices.append(i)
                 points = self.fifteen_points(indices, points)
                 indices.pop()
-        
+
         return points
-    
+
     def pair_points(self) -> int:
         """
         Calculate pair points for hand.
@@ -76,14 +77,14 @@ class Hand:
             int: Number of points hand scores from pairs.
         """
         points = 0
-        
+
         for i in range(len(self)-1):
             for j in range(i+1,len(self)):
-                if(self.cards[i] - self.cards[j] == 0):
+                if self.cards[i] - self.cards[j] == 0:
                     points += 2
-            
+
         return points
-    
+
     def run_points(self) -> int:
         """
         Calculate number of points scored from runs in hand. A run is three or more cards of consecutive ranks.
@@ -92,26 +93,26 @@ class Hand:
             int: Number of points scored from runs in hand.
         """
         points = 0
-        
+
         #Produce list of ranks of all cards, sorted in ascending order.
         ranks = [card.rank for card in self.cards]
-        
+
         run: list[int] = []
 
         for i in range(0, 13):
             #If i is the rank of some card in hand, add it to the current run.
             if i in ranks:
                 run.append(i)
-                
+
             else:
                 #If our built run has three or more ranks in it, it scores points.
                 if len(run) >= 3:
                     points += util.specific_run_points(ranks, run)
                 #Reset run.
                 run = []
-                
+
         return points
-    
+
     def flush_points(self) -> int:
         """
         Calculate points from flushes in hand.
@@ -124,11 +125,11 @@ class Hand:
         """
         #Since a flush must have at least four cards, we only need to check the suits of the first two cards of five for a flush.
         same_suits = np.max([self % self.cards[0].suit, self % self.cards[1].suit])
-        
+
         #If we found at least four cards with the same suit, the hand scores flush points
-        if (same_suits >= 4):
+        if  same_suits >= 4:
             return same_suits
-            
+
         return 0
 
     def ring_points(self) -> int:
@@ -152,9 +153,8 @@ class Hand:
             #If our hand contains multiple of any suit, it cannot form a ring
             if self % suit != 1:
                 return 0
-        
         return 3
-    
+
     def eyes_points(self, cut: Card) -> int:
         """
         Calculate points from Eyes (suit of king/eye in hand matches suit of cut card).
@@ -166,14 +166,14 @@ class Hand:
         Returns:
             int: Number of points scored for Eyes.
         """
-        
+
         for card in self.cards:
             #If card is both a king and matches the suit of the cut card, score one point for Eyes.
             if (card & cut and card.rank == 12):
                 return 1
-        
+
         return 0
-    
+
     def points(self, cut: Card = Card(12,-1)) -> int:
         """
         Calculate number of points hand will earned when scored with or without cut card.

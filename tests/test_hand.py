@@ -21,7 +21,7 @@ def test_add_size(rand_hand: Hand, test_card: Card):
     initial_size = len(rand_hand.cards)
     rand_hand += test_card
     assert len(rand_hand.cards) == initial_size + 1
-    
+
 def test_suit_count(test_hand: Hand):
     assert test_hand % 0 == 2
 
@@ -34,10 +34,10 @@ def test_suit_count(test_hand: Hand):
     (Hand([Card(1,4), Card(3,3), Card(1,3), Card(1,1), Card(10,1)]), 6), #Hand with three-of-a-kind scores 6 points
     (Hand([Card(1,4), Card(1,3), Card(1,0), Card(1,1), Card(1,4)]), 20), #Hand with five-of-a-kind scores 20 points
 ])
-   
+
 def test_pairs(pair_hand: Hand, points: int):
     assert pair_hand.pair_points() == points
-     
+
 #Testing fifteen counting
 @pytest.mark.parametrize("fifteen_hand, points", [
     (Hand(Deck(2, 5).cards[0:5]), 0), #Five cards from this deck can add to at most 10 (only ranks are A and 2). Zero fifteen points expected.
@@ -48,7 +48,7 @@ def test_pairs(pair_hand: Hand, points: int):
 
 def test_fifteen_points(fifteen_hand: Hand, points: int):
     assert fifteen_hand.fifteen_points() == points
-    
+
 #Testing flush_points
 @pytest.mark.parametrize("flush_hand, points", [
     (Hand(Deck(1, 13).cards[0:5]), 0), #This deck has only one rank; each card has a different suit. Flushes should be impossible; scores 0 from flushes.
@@ -56,10 +56,10 @@ def test_fifteen_points(fifteen_hand: Hand, points: int):
     (Hand([Card(5,3), Card(4,3), Card(12,3), Card(2,1), Card(10,3)]), 4), #Hand with four same-suited cards. Scores 4 from flushes.
     (Hand([Card(8,3), Card(3,3), Card(9,3), Card(1,3), Card(5,3)]), 5), #Hand with all cards the same suit. Scores 5 from flushes.
 ])
-  
+
 def test_flush_points(flush_hand: Hand, points: int):
     assert flush_hand.flush_points() == points
-    
+
 #Testing eyes_points
 @pytest.mark.parametrize("eyes_hand, cut, points", [
     (Hand(Deck(11, 1).cards[0:4]), Card(11,0), 0), #This deck has only one suit, with ranks A-J. Cut card is Q with same suit. Since there is no king/eye anywhere in cardset, eyes is impossible; scores 0.
@@ -79,7 +79,7 @@ def test_eyes_points(eyes_hand: Hand, cut: Card, points: int):
 
 def test_ring_points(ring_hand: Hand, points: int):
     assert ring_hand.ring_points() == points
-    
+
 #Testing run points
 @pytest.mark.parametrize("r_hand, points", [
     (Hand(Deck(2,5).cards[0:5]), 0), #This deck has two ranks and thus cannot score runs.
@@ -92,7 +92,7 @@ def test_ring_points(ring_hand: Hand, points: int):
 def test_run_points(r_hand: Hand, points: int):
     assert r_hand.run_points() == points
 
-#Test total points with no cut card.  
+#Test total points with no cut card.
 @pytest.mark.parametrize("point_hand, points", [
     (Hand([Card(0,4), Card(5,3), Card(10,3), Card(8,1), Card(10,1)]), 4), #One pair and one fifteen; expect 4 points.
     (Hand([Card(5,4), Card(6,1), Card(7,3), Card(7,1), Card(6,3)]), 24), #12 run points, 4 pair points, 8 fifteen points; expect 24.
@@ -102,8 +102,8 @@ def test_run_points(r_hand: Hand, points: int):
 
 def test_points_no_cut(point_hand: Hand, points: int):
     assert point_hand.points() == points
-    
-#Test total points with cut card.  
+
+#Test total points with cut card.
 @pytest.mark.parametrize("point_hand, cut, points", [
     (Hand([Card(0,1), Card(5,1), Card(12,3), Card(12,1)]), Card(4,1), 11), #4 flush points, eyes, 2 pair points, 4 fifteen points; expect 11.
     (Hand([Card(5,4), Card(6,1), Card(7,3), Card(7,1)]), Card(6,3), 24), #12 run points, 4 pair points, 8 fifteen points; expect 24.
@@ -121,8 +121,8 @@ def test_points_with_cut(point_hand: Hand, cut: Card, points: int):
     (Hand([Card(4,4), Card(4,3), Card(4,0), Card(4,1)]), Card(4,2), 43), #Forms a ring, 20 pair points, 20 fifteen points; expect 43.
     (Hand([Card(0,4), Card(6,3), Card(1,3), Card(12,1)]), Card(9,1), 1), #This hand has eyes, but nothing else; expect 1.
 ])
-   
-def test_points_hand_unchanged(point_hand: Hand, cut: Card, points: int):
+
+def test_points_hand_unchanged(point_hand: Hand, cut: Card, points: int): #pylint: disable=unused-argument
     test_hand = point_hand
     test_hand.points(cut) #This call should not change the actual contents of test_hand.
     assert test_hand == point_hand

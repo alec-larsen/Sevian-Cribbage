@@ -1,12 +1,13 @@
-from .card import Card
 from core import util
+
+from .card import Card
 
 class Stack():
     cards: list[Card]
-    
+
     def __init__(self, cards: list[Card]):
         self.cards = cards
-    
+
     def __pos__(self) -> int:
         """
         Calculate total value of stack.
@@ -14,12 +15,12 @@ class Stack():
         Returns:
             int: Sum of values of all cards in stack.
         """
-        sum = 0
+        total_value = 0
         for card in self.cards:
-            sum += card.value
-            
-        return sum
-    
+            total_value += card.value
+
+        return total_value
+
     def __invert__(self):
         """
         Calculate flush points in stack.
@@ -32,18 +33,18 @@ class Stack():
         #If stack has less than 4 cards, a flush is impossible.
         if len(self.cards) < 4:
             return 0
-        
+
         #Move through all cards to find the index of the first card with a DIFFERENT suit to the top card.
         for i in range(len(self.cards)):
-            if not(self.cards[i] & self.cards[0]):
+            if not self.cards[i] & self.cards[0]:
                 #If at least top 4 cards have the same suit, flush points are awarded
                 if i >= 4:
                     return i
                 return 0
-        
+
         #If this return is reached, every card in the stack has the same suit.
-        return i + 1
-    
+        return i + 1 #type: ignore[reportPossiblyUnboundVariable]
+
     def pairs(self) -> int:
         """
         Calculate pair points on top of stack.
@@ -62,7 +63,7 @@ class Stack():
                 return points
         #If we make it to this point, all cards on the stack are the same rank.
         return points
-    
+
     def runs(self) -> int:
         """
         Calculate run points at top of stack.
@@ -79,7 +80,7 @@ class Stack():
             if len(cards) >= 3 and util.is_run(cards):
                 points = len(cards)
         return points
-        
+
     def add_card(self, card: Card) -> bool:
         """
         Adds card to stack (as index 0) if allowed by Sevian Cribbage rules.
@@ -90,10 +91,10 @@ class Stack():
         Returns:
             bool: True if card was successfully added to stack. False if adding card is illegal move.
         """
-        if(+self + card.value > 31):
+        if +self + card.value > 31:
             #Return False if adding card would exceed the total allowed value of stack (31).
             return False
-        
+
         #If we didn't return False, card can be added to stack.
         self.cards.insert(0, card)
         return True

@@ -17,7 +17,7 @@ def specific_run_points(ranks: list[int], run: list[int]) -> int:
     for rank in run:
         #Check the number of occurences of rank in ranks. Multiple copies of the same rank have a multiplicative effect on the number of runs possible to form.
         n *= ranks.count(rank)
-    
+
     #Total points scored is the length of the run we checked times the number of runs we were able to form.
     return n*len(run)
 
@@ -33,9 +33,9 @@ def is_run(cards: list[Card]) -> bool:
     """
     ranks = [card.rank for card in cards]
     i = min(ranks)
-    
+
     for _ in range(len(cards)-1):
         if i+1 not in ranks:
             return False
-        i += 1 
+        i += 1
     return True

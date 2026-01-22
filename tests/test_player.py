@@ -1,9 +1,11 @@
+from collections.abc import Callable
+import random
+
+import pytest
+
 from core.deck import Deck
 from core.hand import Hand
 from core.player import Player
-
-import pytest, random
-from collections.abc import Callable
 
 #Generate random hand of six cards and a crib of two cards from Sevian deck. Also randomly select an index from 0 to 5.
 def player_crib_pair():

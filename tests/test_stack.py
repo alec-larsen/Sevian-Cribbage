@@ -12,7 +12,7 @@ from core.stack import Stack
 def test_stack_sum(sum_stack: Stack, value: int):
     assert +sum_stack == value
 
-#Test flush point calculation in stack (__invert__)  
+#Test flush point calculation in stack (__invert__)
 @pytest.mark.parametrize("flush_stack, points", [
     (Stack([Card(6,3), Card(3,3), Card(6,2)]), 0), #Stack with last two cards matching suit. Should return 0.
     (Stack([Card(1,3), Card(3,3), Card(6,3), Card(7,3), Card(4,1)]), 4), #Stack with last four cards matching suit. Should return 4.
@@ -23,7 +23,7 @@ def test_stack_sum(sum_stack: Stack, value: int):
 
 def test_stack_flush(flush_stack: Stack, points: int):
     assert ~flush_stack == points
-    
+
 #Test pair counting in stack.
 @pytest.mark.parametrize("pair_stack, points", [
     (Stack([Card(1,2), Card(3,2), Card(4,2), Card(5,2)]), 0), #All different ranks (but all same suit); expect 0 pair points.
@@ -56,12 +56,12 @@ params = [
 
 #Verify that add_card correctly returns whether new_card can be added to the stack.
 @pytest.mark.parametrize("add_stack, new_card, success, top_card", params)
-def test_add_return(add_stack: Stack, new_card: Card, success: bool, top_card: Card):
+def test_add_return(add_stack: Stack, new_card: Card, success: bool, top_card: Card): #pylint: disable=unused-argument
     assert add_stack.add_card(new_card) == success
 
 #Verify that add_card properly updates stack, leaving added card on top if legal to add.
 @pytest.mark.parametrize("add_stack, new_card, success, top_card", params)
-def test_add_top(add_stack: Stack, new_card: Card, success: bool, top_card: Card):
+def test_add_top(add_stack: Stack, new_card: Card, success: bool, top_card: Card): #pylint: disable=unused-argument
     copy_stack = add_stack #Circumvent restriction that parameters are immutable.
     copy_stack.add_card(new_card)
     assert copy_stack.cards[0] == top_card

@@ -10,7 +10,7 @@ from core.card import Card
 
 def test_specific_run_points(ranks: list[int], run: list[int], points: int):
     assert util.specific_run_points(ranks, run) == points
-    
+
 @pytest.mark.parametrize("cards, run_found", [
     ([Card(5,1),Card(6,2),Card(7,3),Card(8,1),Card(9,0)], True), #Ordered run; expect True
     ([Card(1,0),Card(3,0),Card(2,0),Card(0,0)], True), #Unordered run; expect True

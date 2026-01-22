@@ -8,16 +8,16 @@ class Card:
     rank: int #Exact rank of card i.e. J, Q, K
     value: int #Number of points card is worth when counting, i.e. J, Q, K = 10
     suit: int
-    
+
     def __init__(self, rank: int, suit: int):
         self.rank = rank
         self.value = np.min([self.rank + 1, 10]) #10, J, Q, K cards are all worth 10 points in counting.
         self.suit = suit
-        
+
     def __repr__(self):
         #When print call is made, print card as a tuple of its suit and rank. Built only for decks up to 5 suits and 13 ranks.
-        return(f"{RANKS[self.rank]}{SUITS[self.suit]}")
-        
+        return f"{RANKS[self.rank]}{SUITS[self.suit]}"
+
     def __add__(self, other: Card | int) -> int:
         """
         Add cards valuewise or adds the value of card to an existing integer total.
@@ -28,15 +28,12 @@ class Card:
         Returns:
             int: Sum of values of self and other.
         """
-        if (type(other) == int):
-            return(self.value + other)
-        
-        elif (type(other) == Card):
-            return(self.value + other.value)
-        
+        if isinstance(other, int):
+            return self.value + other
+
         else:
-            return NotImplemented
-        
+            return self.value + other.value
+
     def __sub__(self, other: Card) -> int:
         """
         Subtract cards rankwise.
@@ -47,8 +44,8 @@ class Card:
         Returns:
             int: Difference in rank between self and other.
         """
-        return(self.rank - other.rank)
-    
+        return self.rank - other.rank
+
     def __and__(self, other: Card) -> bool:
         """
         Check if cards have the same suit.
@@ -59,8 +56,8 @@ class Card:
         Returns:
             bool: True if cards have the same suit. False otherwise.
         """
-        return(self.suit == other.suit)
-    
+        return self.suit == other.suit
+
     def __eq__(self, other: object) -> bool:
         """
         Check if two cards are identical; primarily used in testing.
@@ -73,5 +70,5 @@ class Card:
         """
         if not isinstance(other, Card):
             return NotImplemented
-        
+
         return (self.rank == other.rank) and (self & other)
