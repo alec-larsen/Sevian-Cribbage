@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 
 from .hand import Hand
@@ -37,3 +39,17 @@ class Opponent(Player):
         #Else, hand is of size 6 and we must throw away two cards.
         else:
             return np.triu(np.ones(shape=(6,6)),k=1)/15
+
+    def choose_throw_card(self)->list[int]:
+        """
+        Using above decision matrix generators, determine which cards opponent will throw into crib.
+
+        Returns:
+            list[int]: Indices of cards in hand to be thrown into crib; size 1 if player hand is 5 cards, else size 2.
+        """
+        #Package decision functions defined above into a single list for use of list comprehension
+        DECISION_FUNCTIONS = [self.randomDecisionMatrix]
+        #The overall decisionm matrix is the sum of each decision matrix times the weight given to each type of decision by the specific player.
+        decision = sum([dec()*self.behaviour for dec in DECISION_FUNCTIONS])
+        indices = np.argwhere(decision == np.max(decision))
+        return random.choice(indices)
